@@ -1,0 +1,1 @@
+This Android app is an alarm clock that supports playlists. The app also challenges you with a small maths exercise before you can snooze or disable your alarm. The app has a day and night mode (OLED-optimised), and the language will change automatically depending on your Android system settings (English, German).
