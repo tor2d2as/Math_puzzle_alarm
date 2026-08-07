@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_settings">Einstellungen</string>
+    <string name="clock_overview_header">Übersicht über deine Math Puzzle Alarme</string>
+    <string name="every_day">Jeden Tag</string>
+    <string name="folder_name">Ordner Name</string>
+    <string name="clock_setting_header">Einstellungen des Math Puzzle Alarms</string>
+    <string name="set_alarm_time_header">Wähle die Zeit des Math Puzzle Alarms:</string>
+    <string name="set_days_header">Wähle die Wochentage, an denen der Math Puzzle Alarm aktiv sein soll:</string>
+    <string name="Monday_short">Mo</string>
+    <string name="Tuesday_short">Di</string>
+    <string name="Wednesday_short">Mi</string>
+    <string name="Thursday_short">Do</string>
+    <string name="Friday_short">Fr</string>
+    <string name="Saturday_short">Sa</string>
+    <string name="Sunday_short">So</string>
+    <string name="chose_folder_header">Wähle den Ordner aus, der die Musik für den Math Puzzle Alarm enthält:</string>
+    <string name="file_chooser_placeholder">Drücken, um den Ordner auszuwählen</string>
+    <string name="save_clock_setting">Speichere die Einstellungen des Math Puzzle</string>
+    <string name="load_value">Lade Wert, bitte warten</string>
+    <string name="chose_volume_header">Wähle die Lautstärke des Math Puzzles Alarm:</string>
+    <string name="path_chosen">Gewählter Pfad: %1$s</string>
+    <string name="weekend">Wochenende</string>
+    <string name="work_days">Arbeitstage</string>
+    <string name="tomorrow">Heute/Morgen</string>
+    <string name="volume">Lautstärke: %1$s</string>
+    <string name="saving_clock_failure">Beim Speichern der Math Puzzle Alarme ist ein Fehler aufgetreten, überprüfe bitte, ob alle Wecker richtig sind.</string>
+    <string name="no_max_volume_found">Die maximale Lautstärke des Handys konnte nicht ermittelt werden. Bitte beachte beim Setzen des Alarms, dass dein Handy eventuell weniger als 20 verschiedene Lautstärken unterstützt.</string>
+    <string name="solve_exercise_snooze">Löse die Aufgabe, um den Math Puzzle Alarm schlummern zu lassen:</string>
+    <string name="snooze">schlummern</string>
+    <string name="clock_not_set">Es ist ein Fehler aufgetreten, der Math Puzzle Alarm konnte nicht gesetzt werden.</string>
+    <string name="no_alarm_set">Es ist kein Math Puzzle Alarm gesetzt.</string>
+    <string name="next_Alarm">Der nächste Math Puzzle Alarm ist um: %1$s</string>
+    <string name="channel_name_player">Hintergrund Musik Player</string>
+    <string name="channel_description_player">Wird verwendet, um den Math Puzzle Alarm Sound im Hintergrund abzuspielen.</string>
+    <string name="playing_audio_title_notification">Math Puzzle spielt Audio</string>
+    <string name="playing_audio_desc_notification">Math Puzzle spielt Audio, berühren um die App zu öffnen.</string>
+    <string name="no_path_choosen">Es wurde kein Ordner gewählt, ein Standardsound wird abgespielt. Erneut drücken, um Ordner zu wählen.</string>
+    <string name="content_desc_create_new_alarm">Erstelle einen neuen Math Puzzle Alarm.</string>
+    <string name="string_loading_audio_video">Lade Audio/Video...</string>
+    <string name="standard_alarm_song">Spiele den Standard Android Alarm Song</string>
+    <string name="background_info_turn_alarm_off">Alarm\nstoppen</string>
+    <string name="solve_exercise_first_snooze">Um den Math Puzzle Alarm schlummern zu lassen, müssen Sie zuerst die Aufgabe lösen.</string>
+    <string name="solve_exercise_first_stop">Um den Math Puzzle Alarm zu stoppen, müssen Sie zuerst die Aufgabe lösen.</string>
+    <string name="stop_alarm">Alarm stoppen</string>
+</resources>

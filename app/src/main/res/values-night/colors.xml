@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_color">#000000</color>
+    <color name="schriftfarbe">#FFFFFF</color>
+    <color name="gray">#555555</color>
+    <color name="target_outer_ring">#FFF</color>
+    <color name="target_middle_ring">#AAA</color>
+    <color name="target_inner_ring">#888</color>
+    <color name="target_arrow_inside">#777</color>
+</resources>

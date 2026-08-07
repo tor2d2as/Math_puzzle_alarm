@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/math_exercise"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="50sp"
+        android:textColor="@color/schriftfarbe"
+        android:text="10*5="
+        />
+
+ <!--   <TextView
+        android:id="@+id/math_exercise"
+        android:text="placeholder math exercise"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/stop_snooze_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>-->
+
+    <EditText
+        android:id="@+id/user_solution_math"
+        android:layout_below="@id/math_exercise"
+        android:layout_centerHorizontal="true"
+        android:inputType="number"
+        android:layout_width="200dp"
+        android:textSize="50sp"
+        android:textAlignment="center"
+        android:textColor="@color/schriftfarbe"
+        android:layout_height="wrap_content"
+        />
+
+        <RelativeLayout
+            android:layout_below="@id/user_solution_math"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/dialog_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="placeholder"
+                android:textSize="30sp"
+                android:textColor="@color/schriftfarbe"
+                style="?attr/materialButtonOutlinedStyle"/>
+
+        </RelativeLayout>
+
+</RelativeLayout>
+
+</ScrollView>

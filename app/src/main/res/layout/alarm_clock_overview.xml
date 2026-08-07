@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/clock_picture"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/ic_math_puzzle_alarm_app_icon"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/clock_time"
+        android:text="00:00"
+        android:layout_toEndOf="@id/clock_picture"
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/clock_days"
+        android:text="@string/every_day"
+        android:layout_toEndOf="@id/clock_picture"
+        android:layout_below="@id/clock_time"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/clock_folder"
+        android:text="@string/folder_name"
+        android:layout_toEndOf="@id/clock_picture"
+        android:layout_below="@id/clock_days"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+    <TextView
+        android:id="@+id/clock_volume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/clock_folder"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@id/clock_picture"
+        android:text="@string/volume" />
+
+    <Switch
+        android:id="@+id/clock_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+</RelativeLayout>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".play_alarm.Play_alarm">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout_alarm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_color"
+        android:gravity="center_vertical"
+        android:minHeight="?attr/actionBarSize">
+
+        <TextView
+            android:text="@string/app_name"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/schriftfarbe"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/clock_video_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/imageview_background_turn_alarm_off">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/videoPlayer">
+
+        <TextClock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="80sp"
+            android:layout_centerInParent="true">
+        </TextClock>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/videoPlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/textview_file_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/string_loading_audio_video" />
+
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_below="@id/textview_file_name"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:id="@+id/videoTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_above="@id/videoSeekBar"
+            android:layout_alignStart="@id/videoSeekBar"
+            android:textColor="@color/white"/>
+
+        <SeekBar
+            android:id="@+id/videoSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Progress_color"
+            android:layout_alignBottom="@id/surfaceView">
+        </SeekBar>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/videoPlayer">
+
+    <Button
+        android:id="@+id/snooze_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/snooze"
+        android:text="@string/snooze"
+        style="?attr/materialButtonOutlinedStyle"
+        android:textColor="@color/schriftfarbe"/>
+
+    </RelativeLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageview_background_turn_alarm_off"
+        android:background="@drawable/background_turn_alarm_off"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignStart="@id/moving_button"
+        android:layout_alignEnd="@id/stop_button"
+        android:layout_alignParentBottom="true"
+        android:importantForAccessibility="no" />
+
+    <TextView
+        android:id="@+id/text_background_turn_alarm_off"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/background_info_turn_alarm_off"
+        android:textSize="20sp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentBottom="true"
+        tools:ignore="RelativeOverlap"
+        android:textAlignment="center"
+        android:textColor="@color/schriftfarbe"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/moving_button"
+        android:background="@drawable/roundedbutton_enabled"
+        android:layout_centerVertical="true"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentBottom="true"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/stop_button"
+        android:background="@drawable/target_icon"
+        android:layout_centerVertical="true"
+        android:layout_height="60dp"
+        android:layout_width="60dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="3dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>
