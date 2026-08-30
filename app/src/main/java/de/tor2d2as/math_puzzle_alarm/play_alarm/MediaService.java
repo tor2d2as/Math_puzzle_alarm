@@ -12,6 +12,7 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -33,7 +34,11 @@ public class MediaService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mediaPlayer = new MediaPlayer();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            mediaPlayer = new MediaPlayer(createAttributionContext("audioPlayback"));
+        }else{
+            mediaPlayer = new MediaPlayer();
+        }
     }
 
     @Override

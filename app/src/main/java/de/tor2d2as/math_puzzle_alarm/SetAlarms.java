@@ -1,5 +1,6 @@
 package de.tor2d2as.math_puzzle_alarm;
 
+import android.app.ActivityOptions;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -79,7 +80,18 @@ public class SetAlarms {
         //intent.putExtra("alarm_volume", alarm_volume);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context.getApplicationContext(), requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ActivityOptions options;
+            if((Build.VERSION.SDK_INT == Build.VERSION_CODES.UPSIDE_DOWN_CAKE) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.VANILLA_ICE_CREAM)) {
+                options = ActivityOptions.makeBasic().setPendingIntentCreatorBackgroundActivityStartMode(ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED);
+            }else{
+                options = ActivityOptions.makeBasic().setPendingIntentCreatorBackgroundActivityStartMode(ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOW_ALWAYS);
+            }
+            pendingIntent = PendingIntent.getActivity(context.getApplicationContext(), requestCode, intent, PendingIntent.FLAG_IMMUTABLE, options.toBundle());
+        }else {
+            pendingIntent = PendingIntent.getActivity(context.getApplicationContext(), requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
+        }
 
         String date_as_text;
         if (alarm_time_in_millisecond == 0) {

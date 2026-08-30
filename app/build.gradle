@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    compileSdk 37
+    compileSdkVersion 37
 
     defaultConfig {
         applicationId "de.tor2d2as.math_puzzle_alarm"
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 36
         versionCode 1
-        versionName "1.2"
+        versionName "1.2.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -44,4 +44,5 @@
     <string name="solve_exercise_first_snooze">Um den Math Puzzle Alarm schlummern zu lassen, müssen Sie zuerst die Aufgabe lösen.</string>
     <string name="solve_exercise_first_stop">Um den Math Puzzle Alarm zu stoppen, müssen Sie zuerst die Aufgabe lösen.</string>
     <string name="stop_alarm">Alarm stoppen</string>
+    <string name="audio_playback_attribution">Diese App spielt Audio ab.</string>
 </resources>

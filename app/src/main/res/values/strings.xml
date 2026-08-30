@@ -45,4 +45,5 @@
     <string name="solve_exercise_first_snooze">To snooze the Math Puzzle Alarm, you have to solve the exercise first.</string>
     <string name="solve_exercise_first_stop">To stop the Math Puzzle Alarm, you have to solve the exercise first.</string>
     <string name="stop_alarm">stop alarm</string>
+    <string name="audio_playback_attribution">This app plays audio.</string>
 </resources>
