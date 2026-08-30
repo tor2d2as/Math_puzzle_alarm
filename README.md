@@ -14,6 +14,6 @@ This Android app is an alarm clock that can use a user-defined local folder cont
 - The app is available in English and German.<br /> <br /> 
 
 📝Planned Features:<br /> 
-- Update the target version to Android 16.
+- The app now targets Android 16 to prepare for following Android versions: allow the Play_Alarm UI to adjust to Landscape Mode.
 - Allow an user-defined snooze length. 
 - Allow the user to select different difficulty levels for maths exercises.
