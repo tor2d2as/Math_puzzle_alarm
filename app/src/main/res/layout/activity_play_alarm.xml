@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,137 +12,153 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background_color"
-        android:gravity="center_vertical"
-        android:minHeight="?attr/actionBarSize">
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:text="@string/app_name"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_marginLeft="15dp"
-            android:textColor="@color/schriftfarbe"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:gravity="center_vertical"
+            android:text="@string/app_name"
+            android:textColor="@color/schriftfarbe"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
-        android:id="@+id/clock_video_layout"
+
+    <!-- Everything between the AppBar and bottom controls -->
+    <LinearLayout
+        android:id="@+id/content_area"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/imageview_background_turn_alarm_off">
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_gravity="center"
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/videoPlayer">
 
-        <TextClock
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="80sp"
-            android:layout_centerInParent="true">
-        </TextClock>
+        app:layout_constraintTop_toBottomOf="@id/app_bar_layout_alarm"
+        app:layout_constraintBottom_toTopOf="@id/imageview_background_turn_alarm_off"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/videoPlayer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-
-        <TextView
-            android:id="@+id/textview_file_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/string_loading_audio_video" />
-
-        <SurfaceView
-            android:id="@+id/surfaceView"
-            android:layout_below="@id/textview_file_name"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true" />
-
-        <TextView
-            android:id="@+id/videoTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_above="@id/videoSeekBar"
-            android:layout_alignStart="@id/videoSeekBar"
-            android:textColor="@color/white"/>
-
-        <SeekBar
-            android:id="@+id/videoSeekBar"
+        <!-- Remaining space above video -->
+        <RelativeLayout
+            android:id="@+id/clock_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/Progress_color"
-            android:layout_alignBottom="@id/surfaceView">
-        </SeekBar>
+            android:layout_weight="0.5">
 
-    </RelativeLayout>
+            <TextClock
+                android:id="@+id/view_actual_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="80sp" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/videoPlayer">
+        </RelativeLayout>
 
-    <Button
-        android:id="@+id/snooze_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:contentDescription="@string/snooze"
-        android:text="@string/snooze"
-        style="?attr/materialButtonOutlinedStyle"
-        android:textColor="@color/schriftfarbe"/>
+        <!-- Video -->
+        <RelativeLayout
+            android:id="@+id/video_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </RelativeLayout>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/textview_file_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/string_loading_audio_video" />
 
+            <SurfaceView
+                android:id="@+id/video_player_surface_view"
+                android:layout_below="@id/textview_file_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <TextView
+                android:id="@+id/videoTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_above="@id/videoSeekBar"
+                android:layout_alignStart="@id/videoSeekBar"
+                android:textColor="@color/white"/>
+
+            <SeekBar
+                android:id="@+id/videoSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/Progress_color"
+                android:layout_alignBottom="@id/video_player_surface_view">
+            </SeekBar>
+
+        </RelativeLayout>
+
+        <!-- Remaining space below video -->
+        <RelativeLayout
+            android:id="@+id/snooze_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+
+            <Button
+                android:id="@+id/snooze_button"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/snooze"
+                android:textColor="@color/schriftfarbe" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <!-- Bottom area -->
     <ImageView
         android:id="@+id/imageview_background_turn_alarm_off"
-        android:background="@drawable/background_turn_alarm_off"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:layout_alignStart="@id/moving_button"
-        android:layout_alignEnd="@id/stop_button"
-        android:layout_alignParentBottom="true"
-        android:importantForAccessibility="no" />
+        android:background="@drawable/background_turn_alarm_off"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/text_background_turn_alarm_off"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/background_info_turn_alarm_off"
-        android:textSize="20sp"
         android:layout_marginBottom="5dp"
-        android:layout_alignParentBottom="true"
-        tools:ignore="RelativeOverlap"
+        android:text="@string/background_info_turn_alarm_off"
         android:textAlignment="center"
-        android:textColor="@color/schriftfarbe"/>
+        android:textColor="@color/schriftfarbe"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/moving_button"
-        android:background="@drawable/roundedbutton_enabled"
-        android:layout_centerVertical="true"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="15dp"
         android:layout_marginBottom="5dp"
-        android:layout_alignParentBottom="true"/>
+        android:background="@drawable/roundedbutton_enabled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/imageview_background_turn_alarm_off" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/stop_button"
-        android:background="@drawable/target_icon"
-        android:layout_centerVertical="true"
-        android:layout_height="60dp"
         android:layout_width="60dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="60dp"
         android:layout_marginBottom="3dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"/>
-</RelativeLayout>
+        android:background="@drawable/target_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/imageview_background_turn_alarm_off" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

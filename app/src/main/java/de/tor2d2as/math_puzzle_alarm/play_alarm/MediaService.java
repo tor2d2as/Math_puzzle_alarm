@@ -20,25 +20,32 @@ import android.view.SurfaceHolder;
 import androidx.core.app.NotificationCompat;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
 
 import de.tor2d2as.math_puzzle_alarm.R;
 
 public class MediaService extends Service {
     private MediaPlayer mediaPlayer;
     private final IBinder binder = new MediaBinder();
-
-    Alarm_State alarm_state = new Alarm_State();
+    Alarm_State alarm_state;
+    VideoPlayerNotify videoPlayerNotify;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        alarm_state = new Alarm_State();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             mediaPlayer = new MediaPlayer(createAttributionContext("audioPlayback"));
         }else{
             mediaPlayer = new MediaPlayer();
         }
+    }
+
+    /**
+     * It saves the current link to the UI, so the interface: VideoPlayerNotify
+     * can be used.
+     */
+    public void update_videoPlayerNotify(VideoPlayerNotify videoPlayerNotify){
+        this.videoPlayerNotify = videoPlayerNotify;
     }
 
     @Override
@@ -61,28 +68,13 @@ public class MediaService extends Service {
     }
 
     /**
-     * If no video or audio is playing, it starts to play the given file and adjusts the audio volume.
+     * It starts playing a new video, if a video already plays then nothing happens.
      */
-    public void playVideo(SurfaceHolder surfaceHolder, VideoPlayerNotify videoPlayerNotify) {
-
-        //Play the video
-        if(mediaPlayer.isPlaying()) {
-            if(alarm_state.getCurrent_song_playing() != null) {
-                videoPlayerNotify.new_video_tile(alarm_state.getCurrent_song_playing());
-            }
-        }else{
-            //Choose video
-            Uri video_url = choose_random_video();
-            if (video_url == null) {
-                video_url = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-                videoPlayerNotify.new_video_tile(getString(R.string.standard_alarm_song));
-            } else {
-                String path = video_url.getLastPathSegment();
-                if(path != null) {
-                    String[] parted = path.split("/");
-                    alarm_state.setCurrent_song_playing(parted[parted.length-1]);
-                    videoPlayerNotify.new_video_tile(parted[parted.length-1]);
-                }
+    public void playVideo(){
+        if(!alarm_state.is_alarm_playing()) {
+            Uri video_uri = alarm_state.choose_random_video(this);
+            if (video_uri == null) {
+                video_uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             }
 
             //Set the device volume to the alarm volume.
@@ -91,54 +83,43 @@ public class MediaService extends Service {
                 alarm_state.setVolume_already_done(true);
             }
 
-            //Start playing the video.
             try {
                 mediaPlayer.reset();
-                mediaPlayer.setDataSource(this, video_url);
-            } catch (IOException e) {
+                mediaPlayer.setDataSource(this, video_uri);
+                mediaPlayer.prepare();
+            } catch (IOException | IllegalStateException e) {
                 Log.e("Math Alarm", "An error occurred when setting the data source for the media player.");
                 e.printStackTrace();
             }
-            new Thread(() -> {
-                bind_Video_to_Surface(surfaceHolder);
-                if(!surfaceHolder.getSurface().isValid()){
-                    removeSurfaceMediaPlayer();
-                }
-            }).start();
-            mediaPlayer.prepareAsync();
-            mediaPlayer.setOnPreparedListener(mp -> {
-                start_video_Timer(videoPlayerNotify);
-                mediaPlayer.start();
+
+            mediaPlayer.setOnPreparedListener(mp ->{
+                mp.start();
+                request_current_video_information();
+                alarm_state.set_is_alarm_playing(true);
             });
-            // Sets the listener to check if the current file has finished playing.
-            mediaPlayer.setOnCompletionListener(mediaPlayer -> {
-                if (surfaceHolder.getSurface().isValid()) {
-                    videoPlayerNotify.onVideoStopped();
-                }else {
-                    playVideo(surfaceHolder, videoPlayerNotify);
-                }
+
+            mediaPlayer.setOnCompletionListener(mp -> {
+                alarm_state.set_is_alarm_playing(false);
+                playVideo();
             });
         }
     }
 
     /**
-     * It removes the connection between the VideoSurface and the playing video.
-     * In fact, after calling this method, the mediaPlayer will only play the audio from
-     * the video. With the method bind_Video_to_Surface(...), the video can be shown again on the UI.
+     * It collects the video Information from the current video and
+     * sends it to the UI over the interface: videoPlayerNotify.new_video(...)
      */
-    public void removeSurfaceMediaPlayer(){
-        if(mediaPlayer != null) {
-            mediaPlayer.setSurface(null);
+    public void request_current_video_information(){
+        String video_title = alarm_state.getCurrent_song_title(this);
+        if ((video_title != null) && (mediaPlayer != null)) {
+            if (videoPlayerNotify != null) {
+                try {
+                    videoPlayerNotify.new_video(video_title, mediaPlayer.getDuration());
+                    //The exception will be called if videoPlayerNotify == null after it was checked
+                    //(update comes from a different Thread)
+                }catch (Exception ignored){}
+            }
         }
-    }
-
-    /**
-     * Starts the Video Timer (It shows how long the video/audio is already running.),
-     * which is shown on the UI.
-     * @param videoPlayerNotify The interface which should be called.
-     */
-    public void start_video_Timer(VideoPlayerNotify videoPlayerNotify){
-        videoPlayerNotify.onVideoStarted(mediaPlayer, mediaPlayer.getDuration(), mediaPlayer.getCurrentPosition(), alarm_state.isStandard_sound_chosen());
     }
 
     /**
@@ -147,10 +128,52 @@ public class MediaService extends Service {
      *                      (Tip: Check out the XML file of the corresponding UI)
      */
     public void bind_Video_to_Surface(SurfaceHolder surfaceHolder){
-        if(surfaceHolder.getSurface().isValid()) {
-            mediaPlayer.setDisplay(surfaceHolder);
+        if(mediaPlayer != null) {
+            if(surfaceHolder == null){
+                mediaPlayer.setDisplay(null);
+            }else {
+                if(surfaceHolder.getSurface().isValid()) {
+                    mediaPlayer.setDisplay(surfaceHolder);
+                }
+            }
         }
     }
+
+    /**
+     * @return the current time of the video OR -1 if no video is playing.
+     */
+    public int getCurrentVideoTime(){
+        if(mediaPlayer != null) {
+            return mediaPlayer.getCurrentPosition();
+        }else{
+            return -1;
+        }
+    }
+
+
+    /**
+     * @return The current height of the video
+     */
+    public int getVideoHeight(){
+        return mediaPlayer.getVideoHeight();
+    }
+
+    /**
+     * @return The current width of the video
+     */
+    public int getVideoWidth(){
+        return mediaPlayer.getVideoWidth();
+    }
+
+    public interface VideoPlayerNotify {
+        /**
+         * Gets called if the videotitel or the duration of the video changes
+         * @param text The new videotitel
+         * @param duration the new duration
+         */
+        void new_video(final String text, final int duration);
+    }
+
 
     @Override
     public void onDestroy() {
@@ -192,24 +215,6 @@ public class MediaService extends Service {
                 .build();
     }
 
-    public interface VideoPlayerNotify {
-        /**
-         * This method will be called if a new video starts.
-         * It will update the progress bar every second while the video plays.
-         */
-        void onVideoStarted(MediaPlayer mediaPlayer, int videoLength, int videoPosition, boolean standard_sound_chosen);
-
-        /**
-         * This method will be called if the media player stopped. It will also start a new audio/video.
-         */
-        void onVideoStopped();
-
-        /**
-         * This method is called when the video tile changes.
-         */
-        void new_video_tile(String text);
-    }
-
     //----------------------------------------------------------------------------------------------
 
     /**
@@ -240,35 +245,7 @@ public class MediaService extends Service {
         return alarm_state.getAlarm_volume();
     }
 
-    /**
-     * This method chooses a sound to play and returns its path.
-     * If it returns null, the standard sound was chosen.
-     */
-    public Uri choose_random_video() {
-        if (!alarm_state.isStandard_sound_chosen()) {
-            ArrayList<Uri> all_files = alarm_state.get_all_files(this);
-            if((all_files != null) && (!all_files.isEmpty())) {
-                //Some initialization of variables, so that it don't have to be done inside the loop.
-                Random random = new Random();
-                Uri tmp_path;
-                int random_number;
 
-                while (!all_files.isEmpty()) {
-                    random_number = random.nextInt(all_files.size());
-                    tmp_path = all_files.get(random_number);
-                    if (alarm_state.isFilePlayable(this, tmp_path)){
-                        return tmp_path;
-                    } else {
-                        //This line should automatically modify the list in alarm state, since all_files is just a reference to the variable in Alarm_State and not a copy
-                        all_files.remove(random_number);
-                    }
-                }
-            }
-            //Chooses the standard Sound and remembers its decision
-            alarm_state.setStandard_sound_chosen(true);
-        }
-        return null;
-    }
 
     /**
      * Sets the System Volume to the Alarm Volume

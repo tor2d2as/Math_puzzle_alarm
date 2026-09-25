@@ -7,17 +7,22 @@ import android.net.Uri;
 import androidx.documentfile.provider.DocumentFile;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import de.tor2d2as.math_puzzle_alarm.R;
 
 /**
  * This class is used to save all values from the alarm that is currently playing.
  */
 public class Alarm_State {
-    private int old_volume;
-    private String current_song_playing = null;
-    private String clock_folder = null;
-    private int alarm_volume;
-    private boolean volume_already_done = false;
+
+    private Uri selected_file = null;
     private boolean standard_sound_chosen = false;
+    private boolean is_alarm_playing = false;
+    private int alarm_volume;
+    private int old_volume;
+    private String clock_folder = null;
+    private boolean volume_already_done = false;
     //The Arraylist: "all_files" has to be null at the beginning; it is used to check if the list was already initialized.
     private ArrayList<Uri> all_files = null;
 
@@ -36,14 +41,21 @@ public class Alarm_State {
     }
 
     /**
-     * @return The song that the media player is currently playing.
+     * @return The song name which should be displayed to the user.
+     * Null if no file was selected.
      */
-    public String getCurrent_song_playing(){return current_song_playing;}
-
-    /**
-     * Always update this value if the current file from the media player changes to a new file.
-     */
-    public void setCurrent_song_playing(String current_song_playing){this.current_song_playing = current_song_playing;}
+    public String getCurrent_song_title(Context context){
+        if(standard_sound_chosen){
+            return context.getString(R.string.standard_alarm_song);
+        }else {
+            String path = selected_file.getLastPathSegment();
+            if (path != null) {
+                String[] parted = path.split("/");
+                return parted[parted.length - 1];
+            }
+            return null;
+        }
+    }
 
     /**
      * @return The folder which the user selected to play the audio files from it.
@@ -57,6 +69,20 @@ public class Alarm_State {
      */
     public void setClock_folder(String clock_folder) {
         this.clock_folder = clock_folder;
+    }
+
+    /**
+     * @return True = if the alarm is playing, false otherwise.
+     */
+    public boolean is_alarm_playing(){
+        return is_alarm_playing;
+    }
+
+    /**
+     * Update if the alarm starts playing (alarm_playing = true) / stops (alarm_playing = false) playing.
+     */
+    public void set_is_alarm_playing(boolean alarm_playing){
+        this.is_alarm_playing = alarm_playing;
     }
 
     /**
@@ -95,22 +121,53 @@ public class Alarm_State {
     }
 
     /**
-     * Set if the standard sound should be played.
-     * True = Play standard sound
-     * False = Play music from an user-defined folder, defined in getClock_folder().
+     * This method chooses a sound to play and returns its path.
+     * If it returns null, the standard sound was chosen.
      */
-    public void setStandard_sound_chosen(boolean standard_sound_chosen) {
-        this.standard_sound_chosen = standard_sound_chosen;
+    public Uri choose_random_video(Context context) {
+        if (!standard_sound_chosen) {
+            // get_all_files saves the result in all_files
+            get_all_files(context);
+            if((all_files != null) && (!all_files.isEmpty())) {
+                Random random = new Random();
+                Uri tmp_path;
+                int random_number;
+
+                while (!all_files.isEmpty()) {
+                    random_number = random.nextInt(all_files.size());
+                    tmp_path = all_files.get(random_number);
+                    if (isFilePlayable(context, tmp_path)){
+                        selected_file = tmp_path;
+                        return tmp_path;
+                    } else {
+                        all_files.remove(random_number);
+                    }
+                }
+            }
+            //Chooses the standard Sound and remembers its decision
+            standard_sound_chosen = true;
+        }
+        return null;
+    }
+
+    /**
+     * It checks if the chosen file is playable by the Media Player.
+     * @param uri The path to the file
+     * @return True = The media player can play the file; false = otherwise.
+     */
+    private boolean isFilePlayable(Context context, Uri uri){
+        ContentResolver contentResolver = context.getContentResolver();
+        String mimeType = contentResolver.getType(uri);
+        return mimeType != null && (mimeType.startsWith("audio/") || mimeType.startsWith("video/"));
     }
 
     /**
      * Returns an Arraylist with all possible audio and video files for the actual clock.
-     * The list can also include unwanted files, like PDFs. It is not possible to filter them
+     * The list can include unwanted files, like PDFs. It is not possible to filter them
      * because it will need too much resources for larger folders (Android complained about it).
-     * It returns null if the folder wasn't found.
-     * It returns an empty Arraylist, if the folder has no files in it.
+     * It saves the result in: all_files.
      */
-    public ArrayList<Uri> get_all_files(Context context) {
+    public void get_all_files(Context context) {
         if(all_files == null) {
             all_files = new ArrayList<>();
             if (clock_folder != null) {
@@ -126,17 +183,5 @@ public class Alarm_State {
                 }
             }
         }
-        return all_files;
-    }
-
-    /**
-     * It checks if the chosen file is playable by the Media Player.
-     * @param uri The path to the file
-     * @return True = The media player can play the file; false = otherwise.
-     */
-    public boolean isFilePlayable(Context context, Uri uri){
-        ContentResolver contentResolver = context.getContentResolver();
-        String mimeType = contentResolver.getType(uri);
-        return mimeType != null && (mimeType.startsWith("audio/") || mimeType.startsWith("video/"));
     }
 }

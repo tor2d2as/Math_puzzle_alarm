@@ -36,6 +36,7 @@
         android:textAlignment="center"
         android:textColor="@color/schriftfarbe"
         android:layout_height="wrap_content"
+        android:imeOptions="flagNoExtractUi"
         />
 
         <RelativeLayout
