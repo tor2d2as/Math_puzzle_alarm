@@ -100,7 +100,6 @@ public class Play_alarm extends AppCompatActivity implements View.OnTouchListene
 
             //This will be used when starting the Play_alarm.class the first time.
             mediaService.playVideo();
-            set_video_to_surface();
             start_video_Timer();
             mediaService.request_current_video_information();
         }
@@ -211,6 +210,7 @@ public class Play_alarm extends AppCompatActivity implements View.OnTouchListene
             textview_file_name.setText(text);
             videoSeekBar.setMax(duration);
             video_length = " / " + formatTime(duration, new StringBuffer());
+            set_video_to_surface();
         });
     }
 
@@ -233,9 +233,11 @@ public class Play_alarm extends AppCompatActivity implements View.OnTouchListene
 
     @Override
     protected void onUserLeaveHint() {
-        PictureInPictureParams params = new PictureInPictureParams.Builder().build();
-        enterPictureInPictureMode(params);
-        super.onUserLeaveHint();
+        if(video_player_surface_view.isAttachedToWindow()) {
+            PictureInPictureParams params = new PictureInPictureParams.Builder().build();
+            enterPictureInPictureMode(params);
+            super.onUserLeaveHint();
+        }
     }
 
     @Override
